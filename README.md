@@ -75,4 +75,4 @@ Once the data is clean, you can load `layoffs_staging2` into a BI tool (like Tab
 
 ---
 
-Feel free to use or adapt this project for your own datasets!
+
