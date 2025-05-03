@@ -1,47 +1,46 @@
-# Data Cleaning Project – Layoffs Dataset (SQL)
+# 🧹 Layoffs Dataset – SQL Data Cleaning Project
 
-This repository contains a full SQL-based pipeline to clean and prepare a raw layoffs dataset for analysis.  
-The project is structured into modular files, each representing a specific phase in the data cleaning workflow.
-
----
-
-## 🧰 Tools & Techniques
-
-- **SQL** (MySQL syntax)
-- **Window Functions & CTEs** – for deduplication
-- **String Functions** – `TRIM()`, `LIKE`, pattern matching
-- **Date Conversion** – `STR_TO_DATE()`, `ALTER COLUMN`
-- **Self-Join Updates** – to backfill missing values
-- **Final Cleanup** – drop helper columns, remove unusable rows
+This project is something I put together to show my understanding of SQL, especially when it comes to cleaning and prepping real-world data for analysis. It’s a full walkthrough of how I cleaned a messy layoffs dataset using only SQL (MySQL syntax), broken into clear, modular steps.
 
 ---
 
-## 📋 Workflow Overview
+## 🔧 Tools & Techniques
 
-Each step of the data cleaning process is written in a separate `.sql` file:
+- **SQL (MySQL)**
+- **Window Functions** – for finding and removing duplicates  
+- **String Functions** – cleaning up messy text  
+- **Date Handling** – converting strings to proper date types  
+- **Self-Joins** – used for filling in missing values  
+- **General Cleanup** – removing bad data and helper columns
+
+---
+
+## 📁 Cleaning Steps
+
+The cleaning process is split into 5 parts:
 
 1. **`01_remove_duplicates.sql`**  
-   - Use `ROW_NUMBER()` to identify duplicates in `layoffs_staging`  
-   - Preview and remove rows where `row_num > 1`
+   - Use `ROW_NUMBER()` to flag duplicate rows in `layoffs_staging`  
+   - Delete any rows where `row_num > 1`
 
 2. **`02_create_staging2_and_dedupe.sql`**  
-   - Create a new cleaned table `layoffs_staging2`  
-   - Insert deduplicated records using window functions
+   - Create a new table `layoffs_staging2`  
+   - Insert only the cleaned, deduplicated records
 
 3. **`03_standardize_fields.sql`**  
-   - Trim whitespace from `company`  
-   - Normalize `industry` labels (e.g. `Crypto%` → `Crypto`)  
-   - Strip trailing periods from `country`  
-   - Convert `date` strings to proper `DATE` format
+   - Trim extra spaces in `company` names  
+   - Clean up `industry` labels (like `Crypto%` → `Crypto`)  
+   - Fix `country` values (remove periods)  
+   - Convert string dates to `DATE` format
 
 4. **`04_handle_nulls_and_backfill.sql`**  
-   - Convert blank strings to `NULL`  
-   - Backfill missing `industry` using self-joins  
-   - Remove rows with both `total_laid_off` and `percentage_laid_off` as `NULL`
+   - Replace blank strings with `NULL`  
+   - Fill in missing `industry` values using a self-join  
+   - Remove rows missing both `total_laid_off` and `percentage_laid_off`
 
 5. **`05_finalize_cleanup.sql`**  
-   - Drop the helper column `row_num`  
-   - Result: `layoffs_staging2` table is cleaned and ready for analysis
+   - Drop helper columns like `row_num`  
+   - Final cleaned table: `layoffs_staging2`
 
 ---
 
@@ -58,22 +57,22 @@ Each step of the data cleaning process is written in a separate `.sql` file:
 
 ---
 
-## 🔗 Next Steps
+## 🔍 Next Steps
 
-- Load the cleaned `layoffs_staging2` into a BI tool (e.g. Tableau, Power BI)
-- Analyze:
-  - Layoff trends over time
-  - Industry-specific job cuts
-  - Regional patterns based on `country` or `location`
+Once the data is clean, you can load `layoffs_staging2` into a BI tool (like Tableau or Power BI) and explore questions like:
 
----
-
-## 📌 Notes
-
-- SQL code is written for **MySQL** — minor adjustments may be needed for other databases
-- Designed to showcase **practical SQL data cleaning skills** on your portfolio or CV
-- Scripts are modular — run in the listed order for expected results
+- How have layoffs changed over time?
+- Which industries were hit the hardest?
+- Are there any trends by country or region?
 
 ---
 
-Feel free to fork, adapt, or expand this pipeline for your own datasets or analysis workflows!
+## 📝 Notes
+
+- This project uses **MySQL syntax**, but you can tweak the SQL to work with other databases.
+- It’s a great example of hands-on SQL cleaning for your portfolio or resume.
+- Each script is standalone — just run them in order to get the final cleaned table.
+
+---
+
+Feel free to use or adapt this project for your own datasets!
