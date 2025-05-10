@@ -1,78 +1,81 @@
-# 🧹 Layoffs Dataset – SQL Data Cleaning Project
+# 📊 Layoffs Dataset – SQL Data Cleaning & EDA Project
 
-This project is something I put together to show my understanding of SQL, especially when it comes to cleaning and prepping real-world data for analysis. It’s a full walkthrough of how I cleaned a messy layoffs dataset using only SQL (MySQL syntax), broken into clear, modular steps.
+This project demonstrates my skills in SQL by walking through a complete data pipeline: **cleaning a real-world layoffs dataset** and then performing **exploratory data analysis (EDA)** to uncover trends across industries, countries, and time.
 
 ---
 
 ## 🔧 Tools & Techniques
 
-- **SQL (MySQL)**
-- **Window Functions** – for finding and removing duplicates  
-- **String Functions** – cleaning up messy text  
-- **Date Handling** – converting strings to proper date types  
-- **Self-Joins** – used for filling in missing values  
-- **General Cleanup** – removing bad data and helper columns
+**SQL (MySQL)** – All data prep and analysis done in SQL  
+- **Window Functions** – Identifying duplicates, ranking  
+- **String Functions** – Text standardization  
+- **Date Handling** – Parsing dates, monthly/yearly grouping  
+- **Self-Joins** – Filling missing values  
+- **Aggregations & CTEs** – Used extensively in EDA  
+- **Rolling Totals & RANK** – For trend and top-N analysis  
 
 ---
 
-## 📁 Cleaning Steps
+## 📁 Data Cleaning Steps
 
-The cleaning process is split into 5 parts:
+The cleaning process is split into 5 modular SQL scripts:
 
-1. **`01_remove_duplicates.sql`**  
-   - Use `ROW_NUMBER()` to flag duplicate rows in `layoffs_staging`  
-   - Delete any rows where `row_num > 1`
+| File                                  | Description                                                  |
+|---------------------------------------|--------------------------------------------------------------|
+| `01_remove_duplicates.sql`            | Use `ROW_NUMBER()` to flag and remove duplicate rows         |
+| `02_create_staging2_and_dedupe.sql`   | Create `layoffs_staging2` with deduplicated records          |
+| `03_standardize_fields.sql`          | Clean and normalize company, industry, and country fields; convert dates |
+| `04_handle_nulls_and_backfill.sql`    | Replace blanks with NULLs, fill missing industry values using a self-join |
+| `05_finalize_cleanup.sql`             | Drop helper columns and finalize the clean table             |
 
-2. **`02_create_staging2_and_dedupe.sql`**  
-   - Create a new table `layoffs_staging2`  
-   - Insert only the cleaned, deduplicated records
+**Final output:** A clean, analysis-ready table named `layoffs_staging2`.
 
-3. **`03_standardize_fields.sql`**  
-   - Trim extra spaces in `company` names  
-   - Clean up `industry` labels (like `Crypto%` → `Crypto`)  
-   - Fix `country` values (remove periods)  
-   - Convert string dates to `DATE` format
+---
 
-4. **`04_handle_nulls_and_backfill.sql`**  
-   - Replace blank strings with `NULL`  
-   - Fill in missing `industry` values using a self-join  
-   - Remove rows missing both `total_laid_off` and `percentage_laid_off`
+## 📊 EDA: Exploratory Data Analysis
 
-5. **`05_finalize_cleanup.sql`**  
-   - Drop helper columns like `row_num`  
-   - Final cleaned table: `layoffs_staging2`
+Once the data is cleaned, I performed EDA to uncover trends and insights, using SQL queries such as:
+
+- 📈 **Total Layoffs Over Time** – Monthly, yearly, and rolling totals  
+- 🏭 **Top Industries by Layoffs** – Industry-wise aggregation  
+- 🌍 **Layoffs by Country** – Which regions saw the most cuts?  
+- 🏢 **Top Companies per Year** – Using `DENSE_RANK()` to highlight the hardest-hit companies annually  
+- 💰 **Funding vs Layoffs** – Which highly funded companies still laid off staff?  
+- 📅 **Earliest & Latest Layoffs** – Dataset range analysis  
+
+See `eda_queries.sql` (or in a Jupyter notebook if included) for full SQL breakdown.
 
 ---
 
 ## 📂 Repo Contents
 
-| File                        | Description                                 |
-|-----------------------------|---------------------------------------------|
-| `01_remove_duplicates.sql`  | Identifies and removes duplicate rows       |
-| `02_create_staging2_and_dedupe.sql` | Creates cleaned table and deduplicates it |
-| `03_standardize_fields.sql` | Trims and normalizes text & date fields     |
-| `04_handle_nulls_and_backfill.sql` | Handles missing values and fills gaps      |
-| `05_finalize_cleanup.sql`   | Final touches and cleanup                   |
-| `README.md`                 | Project overview and instructions           |
+| File                                          | Description                                   |
+|-----------------------------------------------|-----------------------------------------------|
+| `01_remove_duplicates.sql` → `05_finalize_cleanup.sql` | Full data cleaning pipeline                  |
+| `eda_queries.sql` (optional)                  | Key EDA queries on cleaned data              |
+| `README.md`                                   | This project overview and walkthrough         |
 
 ---
 
-## 🔍 Next Steps
+## 📌 Insights Found
 
-Once the data is clean, you can load `layoffs_staging2` into a BI tool (like Tableau or Power BI) and explore questions like:
+- Layoffs peaked in **[YEAR or MONTH]** with over **[X]** people laid off  
+- **[Industry X]** was the most affected sector  
+- Companies like **[Company A, Company B]** ranked highest in layoffs during **[Year]**  
 
-- How have layoffs changed over time?
-- Which industries were hit the hardest?
-- Are there any trends by country or region?
+
+---
+
+## 🚀 Next Steps
+
+- Visualize the EDA using Python (e.g., pandas, matplotlib) or BI tools like Tableau  
+- Explore trends over quarters and correlate layoffs with funding data  
+- Build a dashboard or simple app to interact with the cleaned data  
 
 ---
 
 ## 📝 Notes
 
-- This project uses **MySQL syntax**, but you can tweak the SQL to work with other databases.
-- It’s a great example of hands-on SQL cleaning for your portfolio or resume.
-- Each script is standalone — just run them in order to get the final cleaned table.
-
----
-
-
+- The project uses **MySQL syntax**, but queries can be adapted to other SQL dialects  
+- All scripts are modular – just run them in order  
+- This is a strong portfolio piece showing both **data wrangling** and **analytical thinking**  
